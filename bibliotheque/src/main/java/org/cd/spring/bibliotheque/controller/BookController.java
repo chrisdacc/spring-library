@@ -5,21 +5,24 @@ import org.cd.spring.bibliotheque.model.Book;
 import org.cd.spring.bibliotheque.model.User;
 import org.cd.spring.bibliotheque.repository.BookRepository;
 import org.cd.spring.bibliotheque.service.BookService;
+import org.cd.spring.bibliotheque.service.EmpruntService;
 import org.cd.spring.bibliotheque.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/book")
+@RequestMapping("/api/book")
 public class BookController {
 
     private BookService bookService;
     private UserService userService;
+    private EmpruntService empruntService;
 
     public BookController(BookService bookService){
         this.bookService = bookService;
@@ -80,18 +83,17 @@ public class BookController {
 
     }
 
-    @PostMapping("/{id}/borrow")
+    @PostMapping("/{id}/emprunt")
     public ResponseEntity<String> borrowBook(@PathVariable Long id) {
         // Retrieve the currently authenticated user
-        User currentUser = userService.getCurrentUser();
-
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getDetails();
         // Retrieve the book by ID
-        Book book = bookService.getBookById(id);
+        Book book = bookService.findBook(Math.toIntExact(id));
 
         // Check if the book is available
-        if (book.getAvailableCopies() > 0) {
+        if (book.getNombreDisponible() > 0) {
             // Borrow the book
-            borrowService.borrowBook(currentUser, book);
+            empruntService.empruntBook(currentUser, book);
 
             return new ResponseEntity<>("Book borrowed successfully", HttpStatus.OK);
         } else {

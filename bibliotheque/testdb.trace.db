@@ -448,3 +448,7 @@ Caused by: org.h2.mvstore.MVStoreException: The file is locked: /Users/new/Docum
 org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
 2023-12-01 16:01:56.016236+01:00 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2023-12-04 18:12:13.287092+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2023-12-04 18:19:14.815631+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
